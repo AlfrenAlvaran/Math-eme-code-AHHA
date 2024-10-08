@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Problem Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #problemResult {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .math-problem {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        ol {
+            margin-top: 10px;
+        }
+    </style>
+    <!-- Include MathJax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+</head>
+<body>
+    <h1>Calculus Problem Generator</h1>
+    <form id="mathForm">
+        <label for="answer">Enter the Answer:</label>
+        <input type="number" id="answer" name="answer" required>
+        <button type="submit">Generate Calculus Problem</button>
+    </form>
+
+    <div id="problemResult"></div>
+
+    <script>
+        document.getElementById('mathForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const answer = parseFloat(document.getElementById('answer').value);
+            const resultElement = document.getElementById('problemResult');
+
+            if (isNaN(answer) || answer === 0) {
+                resultElement.textContent = "Please enter a valid non-zero number.";
+                return;
+            }
+
+            const calculusProblem = generateDetailedCalculusProblem(answer);
+            resultElement.innerHTML = calculusProblem;
+
+            // Typeset the math with MathJax
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        });
+
+        // Function to generate a detailed calculus problem based on the answer
+        function generateDetailedCalculusProblem(answer) {
+            const problems = [];
+            const parts = 2; // Number of parts to split the integral
+            const coefficients = [getRandomInt(1, 5), getRandomInt(1, 5)];
+            const variables = ['x', 'y'];
+
+            for (let i = 0; i < parts; i++) {
+                const coeff = coefficients[i];
+                const variable = variables[i % 2];
+                const term = `${coeff}${variable}`;
+                const integral = `\\int ${term} \\, d${variable} = \\frac{${coeff}}{2}${variable}^2 + C`;
+                problems.push(`For ${term}: \\(${integral}\\)`);
+            }
+
+            const combinedIntegral = `\\int (${problems.join(' + ')}) \\, d${variables[0]} = \\frac{${coefficients[0]}}{2}${variables[0]}^2 + ${coefficients[1]}${variables[1]} + C`;
+
+            return `For your specific case, the integral can be split into two parts:<br><ol>${problems.map(p => `<li>${p}</li>`).join('')}</ol>Thus, the combined indefinite integral is:<br>\\(${combinedIntegral}\\)`;
+        }
+
+        // Helper function to generate random integers within a range
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Formula Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #problemResult {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Math Formula Generator</h1>
+    <form id="mathForm">
+        <label for="answer">Enter the Answer:</label>
+        <input type="number" id="answer" name="answer" required>
+        <button type="submit">Generate Math Problem</button>
+    </form>
+
+    <div id="problemResult"></div>
+
+    <script>
+        document.getElementById('mathForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const answer = parseInt(document.getElementById('answer').value);
+            const resultElement = document.getElementById('problemResult');
+
+            if (isNaN(answer) || answer <= 0) {
+                resultElement.textContent = "Please enter a valid positive number.";
+                return;
+            }
+
+            const mathFormula = generateMathFormula(answer);
+            resultElement.textContent = `Generated Formula: ${mathFormula}`;
+        });
+
+        // Function to generate a complex math formula based on the answer
+        function generateMathFormula(answer) {
+            // Generate random numbers to create a formula
+            const num1 = getRandomInt(1, answer);
+            const num2 = getRandomInt(1, 10);
+            const num3 = getRandomInt(1, 10);
+
+            // Randomly choose operations
+            const operators = ['+', '-', '*', '/'];
+            const operator1 = operators[getRandomInt(0, operators.length - 1)];
+            const operator2 = operators[getRandomInt(0, operators.length - 1)];
+
+            // Calculate the initial value using a simple formula
+            let intermediateValue = eval(`${num1} ${operator1} ${num2}`);
+
+            // Adjust the intermediate value to make sure it divides cleanly when needed
+            if (operator2 === '/' && intermediateValue !== 0) {
+                intermediateValue *= num3;
+            }
+
+            // Generate the final formula that equals the answer
+            const formula = `(${num1} ${operator1} ${num2}) ${operator2} ${num3}`;
+
+            // Calculate the result of the formula to match the answer
+            const calculatedAnswer = eval(formula);
+
+            // Scale the formula to ensure it equals the desired answer
+            const scaleFactor = answer / calculatedAnswer;
+            const scaledFormula = `(${num1 * scaleFactor} ${operator1} ${num2 * scaleFactor}) ${operator2} ${num3 * scaleFactor}`;
+
+            return `${scaledFormula} = ${answer}`;
+        }
+
+        // Helper function to generate random integers within a range
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script>
+</body>
+</html>

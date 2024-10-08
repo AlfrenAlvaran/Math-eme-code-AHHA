@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Problem Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #problemResult {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .math-problem {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculus Problem Generator</h1>
+    <form id="mathForm">
+        <label for="problemType">Select Problem Type:</label>
+        <select id="problemType" name="problemType">
+            <option value="derivative">Derivative</option>
+            <option value="integral">Integral</option>
+        </select>
+
+        <button type="submit">Generate Calculus Problem</button>
+    </form>
+
+    <div id="problemResult"></div>
+
+    <script>
+        document.getElementById('mathForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const problemType = document.getElementById('problemType').value;
+            const resultElement = document.getElementById('problemResult');
+
+            let calculusProblem = '';
+
+            if (problemType === 'derivative') {
+                calculusProblem = generateDerivativeProblem();
+            } else if (problemType === 'integral') {
+                calculusProblem = generateIntegralProblem();
+            }
+
+            resultElement.innerHTML = `Generated Calculus Problem:<br><span class="math-problem">${calculusProblem}</span>`;
+        });
+
+        // Function to generate a random derivative problem
+        function generateDerivativeProblem() {
+            const coefficients = [getRandomInt(1, 5), getRandomInt(1, 5), getRandomInt(1, 5)];
+            const polynomial = `${coefficients[0]}x^3 + ${coefficients[1]}x^2 + ${coefficients[2]}x`;
+
+            return `Find the derivative of: \\( f(x) = ${polynomial} \\)`;
+        }
+
+        // Function to generate a random integral problem
+        function generateIntegralProblem() {
+            const coefficients = [getRandomInt(1, 5), getRandomInt(1, 5), getRandomInt(1, 5)];
+            const polynomial = `${coefficients[0]}x^2 + ${coefficients[1]}x + ${coefficients[2]}`;
+            const lowerLimit = getRandomInt(1, 5);
+            const upperLimit = getRandomInt(6, 10);
+
+            return `Calculate the integral: \\( \\int_{${lowerLimit}}^{${upperLimit}} (${polynomial}) \\,dx \\)`;
+        }
+
+        // Helper function to generate random integers within a range
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script>
+</body>
+</html>
